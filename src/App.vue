@@ -30,4 +30,10 @@ export default {
 body {
   margin: 0;
 }
+
+.workspace {
+  margin-top: 120px;
+  max-height: 225px;
+  max-width: 400px;
+}
 </style>

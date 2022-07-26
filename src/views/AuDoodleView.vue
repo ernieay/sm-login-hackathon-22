@@ -1,6 +1,6 @@
 <template>
   <div class="au-doodle">
-    <h1>This is the au doodle</h1>
+    <HackathonDoodle/>
     <LoginImage />
   </div>
 </template>
@@ -8,11 +8,13 @@
 <script>
 // @ is an alias to /src
 import LoginImage from '@/components/LoginImage.vue'
+import HackathonDoodle from '@/components/HackathonDoodle.vue'
 
 export default {
   name: 'AuDoodle',
   components: {
-    LoginImage
+    LoginImage,
+    HackathonDoodle,
   }
 }
 </script>
