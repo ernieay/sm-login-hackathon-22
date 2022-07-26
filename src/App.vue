@@ -3,17 +3,20 @@
     <AppHeader />
   </nav>
   <router-view/>
+  <LoginUser />
 </template>
 
 
 <script>
 // @ is an alias to /src
 import AppHeader from '@/components/AppHeader.vue'
+import LoginUser from '@/components/LoginUser.vue'
 
 export default {
   name: 'HomeView',
   components: {
     AppHeader,
+    LoginUser,
   }
 }
 </script>

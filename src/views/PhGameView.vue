@@ -2,21 +2,16 @@
   <div class="ph-game">
     <canvas id="patintero" class="workspace">
     </canvas>
-    <LoginUser />
   </div>
 </template>
 
 <script>
 
-import LoginUser from '@/components/LoginUser.vue'
 import { ref } from '@vue/reactivity'
 import { onMounted } from '@vue/runtime-core'
 
 export default {
   name: 'PhGame',
-  components: {
-    LoginUser
-  },
   setup: () => {
     onMounted(() => {
       document.addEventListener('keydown', (e) => {
