@@ -1,13 +1,13 @@
 <template>
   <div class="navbar">
     <div class="dropdown">
-      <button class="dropbtn">Dropdown
+      <button class="dropbtn">Time Travel
         <i class="fa fa-caret-down"></i>
       </button>
       <div class="dropdown-content">
-        <router-link to="/">Home</router-link>
+        <router-link to="/">Default</router-link>
         <router-link to="/xmas">Christmas</router-link>
-        <router-link to="/au-doodle">AU Doodle</router-link>
+        <router-link to="/au-doodle">26 July (Hackathon)</router-link>
         <router-link to="/au-game">AU Game</router-link>
         <router-link to="/ph-doodle">PH Doodle</router-link>
         <router-link to="/ph-game">PH Game</router-link>
