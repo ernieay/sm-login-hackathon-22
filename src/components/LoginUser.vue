@@ -1,5 +1,7 @@
 <template>
   <div class="login-form-container">
+    <p class="welcome-title">Welcome!</p>
+    <p class="welcome-subtitle">Please, log in to your account below.</p>
     <div class="login-form">
       <div>
         <label class="lbl-email">E-mail address <span>*</span></label>
@@ -21,9 +23,23 @@ export default {
 </script>
 
 <style scoped>
+.welcome-title {
+  font-size: 24px;
+  margin: 0;
+  font-weight: 800;
+}
+.welcome-subtitle {
+  font-size: 16px;
+  margin: 0;
+}
+
 .login-form-container {
-  padding-top: 50px;
+  padding-top: 30px;
   width: 100%;
+}
+
+.login-form {
+  padding-top: 80px;
 }
 
 .remember {
