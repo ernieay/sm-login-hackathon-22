@@ -2,7 +2,7 @@
   <div class="login-form-container">
     <p class="welcome-title">Welcome!</p>
     <p class="welcome-subtitle">Please, log in to your account below.</p>
-    <div class="login-form">
+    <form class="login-form" action="/loggedin">
       <div>
         <label class="lbl-email">E-mail address <span>*</span></label>
         <input class="email-input" type="text" placeholder="Enter e-mail" />
@@ -11,8 +11,8 @@
           <input type="checkbox" class="remember-me" name="remember-me">
         </span>
       </div>
-      <button type="button" class="next-btn">Next</button>
-    </div>
+      <input type="submit" class="next-btn" value="Next" />
+    </form>
   </div>
 </template>
 

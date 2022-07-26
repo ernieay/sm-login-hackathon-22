@@ -5,6 +5,7 @@ import AuGameView from '../views/AuGameView.vue'
 import PhDoodleView from '../views/PhDoodleView.vue'
 import PhGameView from '../views/PhGameView.vue'
 import XmasView from '../views/XmasView.vue'
+import LoggedInView from '../views/LoggedInView.vue'
 
 const routes = [
   {
@@ -36,6 +37,11 @@ const routes = [
     path: '/ph-game',
     name: 'ph game',
     component: PhGameView
+  },
+  {
+    path: '/loggedin',
+    name: 'logged in',
+    component: LoggedInView
   },
 ]
 
