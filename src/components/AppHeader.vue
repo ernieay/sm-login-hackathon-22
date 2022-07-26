@@ -1,11 +1,11 @@
 <template>
   <div class="navbar">
-    <router-link to="/">Home</router-link>
     <div class="dropdown">
       <button class="dropbtn">Dropdown
         <i class="fa fa-caret-down"></i>
       </button>
       <div class="dropdown-content">
+        <router-link to="/">Home</router-link>
         <router-link to="/xmas">Christmas</router-link>
         <router-link to="/au-doodle">AU Doodle</router-link>
         <router-link to="/au-game">AU Game</router-link>
