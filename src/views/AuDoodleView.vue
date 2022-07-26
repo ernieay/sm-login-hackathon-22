@@ -1,19 +1,19 @@
 <template>
   <div class="au-doodle">
     <HackathonDoodle/>
-    <LoginImage />
+    <LoginUser />
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
-import LoginImage from '@/components/LoginImage.vue'
+import LoginUser from '@/components/LoginUser.vue'
 import HackathonDoodle from '@/components/HackathonDoodle.vue'
 
 export default {
   name: 'AuDoodle',
   components: {
-    LoginImage,
+    LoginUser,
     HackathonDoodle,
   }
 }

@@ -1,18 +1,18 @@
 <template>
   <div class="au-game">
     <h1>This is the au game</h1>
-    <LoginImage />
+    <LoginUser />
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
-import LoginImage from '@/components/LoginImage.vue'
+import LoginUser from '@/components/LoginUser.vue'
 
 export default {
   name: 'AuGame',
   components: {
-    LoginImage
+    LoginUser
   }
 }
 </script>
