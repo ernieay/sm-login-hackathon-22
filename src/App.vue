@@ -32,7 +32,7 @@ body {
 }
 
 .workspace {
-  margin-top: 120px;
+  margin: 120px auto 0;
   max-height: 225px;
   max-width: 400px;
 }
