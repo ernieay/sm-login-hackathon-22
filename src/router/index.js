@@ -1,5 +1,10 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
+import AuDoodleView from '../views/AuDoodleView.vue'
+import AuGameView from '../views/AuGameView.vue'
+import PhDoodleView from '../views/PhDoodleView.vue'
+import PhGameView from '../views/PhGameView.vue'
+import XmasView from '../views/XmasView.vue'
 
 const routes = [
   {
@@ -7,19 +12,30 @@ const routes = [
     name: 'home',
     component: HomeView
   },
-  // example
-  // {
-  //   path: '/about',
-  //   name: 'about',
-  //   // route level code-splitting
-  //   // this generates a separate chunk (about.[hash].js) for this route
-  //   // which is lazy-loaded when the route is visited.
-  //   component: () => import(/* webpackChunkName: "about" */ '../views/AboutView.vue')
-  // },
   {
     path: '/xmas',
     name: 'xmas',
-    component: () => import('../views/XmasView.vue')
+    component: XmasView
+  },
+  {
+    path: '/au-doodle',
+    name: 'au doodle',
+    component: AuDoodleView
+  },
+  {
+    path: '/au-game',
+    name: 'au game',
+    component: AuGameView
+  },
+  {
+    path: '/ph-doodle',
+    name: 'ph doodle',
+    component: PhDoodleView
+  },
+  {
+    path: '/ph-game',
+    name: 'ph game',
+    component: PhGameView
   },
 ]
 
