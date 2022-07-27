@@ -26,7 +26,7 @@ export default {
 /* Navbar container */
 .navbar {
   overflow: hidden;
-  background-color: #f8f9fa;
+  background-color: #102027;
   font-family: Arial;
 }
 
@@ -34,7 +34,7 @@ export default {
 .navbar a {
   float: left;
   font-size: 16px;
-  color: #333;
+  color: #fff;
   text-align: center;
   padding: 14px 16px;
   text-decoration: none;
@@ -51,18 +51,13 @@ export default {
   font-size: 16px;
   border: none;
   outline: none;
-  color: #333;
+  color: #fff;
   padding: 14px 16px;
   background-color: inherit;
   font-family: inherit; /* Important for vertical align on mobile phones */
   margin: 0; /* Important for vertical align on mobile phones */
   cursor: pointer;
   min-width: 120px;
-}
-
-/* Add a red background color to navbar links on hover */
-.navbar a:hover, .dropdown:hover .dropbtn {
-  background-color: rgb(227, 220, 220);
 }
 
 /* Dropdown content (hidden by default) */
@@ -83,11 +78,6 @@ export default {
   text-decoration: none;
   display: block;
   text-align: left;
-}
-
-/* Add a grey background color to dropdown links on hover */
-.dropdown-content a:hover {
-  background-color: #ddd;
 }
 
 /* Show the dropdown menu on hover */
