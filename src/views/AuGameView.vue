@@ -8,7 +8,7 @@
 import { onMounted } from '@vue/runtime-core'
 
 const PLAYER_SIZE = 70;
-const WALL_GAP_MIN = 100;
+const WALL_GAP_MIN = 110;
 const WALL_GAP_MAX = 200;
 const WALL_CREATE_FREQUENCY = 200;
 
