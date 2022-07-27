@@ -6,11 +6,11 @@
       </button>
       <div class="dropdown-content">
         <router-link to="/">Default</router-link>
-        <router-link to="/xmas">Christmas</router-link>
         <router-link to="/au-doodle">26 July (Hackathon)</router-link>
         <router-link to="/au-game">AU Game</router-link>
         <router-link to="/ph-doodle">PH Doodle</router-link>
         <router-link to="/ph-game">PH Game</router-link>
+        <router-link to="/xmas">25 Dec (Christmas)</router-link>
       </div>
     </div>
   </div>
