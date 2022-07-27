@@ -12,6 +12,35 @@
       >
         Play again
       </button>
+      <div class="difficulty">
+        <input
+          type="radio"
+          id="normal"
+          name="difficulty"
+          value="normal"
+          :checked="difficulty === 'normal'"
+          @change="onChangeDifficulty"
+        >
+        <label for="normal">Normal</label><br>
+        <input
+          type="radio"
+          id="hard"
+          name="difficulty"
+          value="hard"
+          :checked="difficulty === 'hard'"
+          @change="onChangeDifficulty"
+        >
+        <label for="hard">Hard</label><br>
+        <input
+          type="radio"
+          id="extremely-hard"
+          name="difficulty"
+          value="extremely-hard"
+          :checked="difficulty === 'extremely-hard'"
+          @change="onChangeDifficulty"
+        >
+        <label for="extremely-hard">Killed John Wick's dog</label>
+      </div>
     </div>
     <div v-if="!started" class="instruction">
       <p>"Patintero"</p>
@@ -20,6 +49,35 @@
       <button @click="onStart">
         Play
       </button>
+      <div class="difficulty">
+        <input
+          type="radio"
+          id="normal"
+          name="difficulty"
+          value="normal"
+          :checked="difficulty === 'normal'"
+          @change="onChangeDifficulty"
+        >
+        <label for="normal">Normal</label><br>
+        <input
+          type="radio"
+          id="hard"
+          name="difficulty"
+          value="hard"
+          :checked="difficulty === 'hard'"
+          @change="onChangeDifficulty"
+        >
+        <label for="hard">Hard</label><br>
+        <input
+          type="radio"
+          id="extremely-hard"
+          name="difficulty"
+          value="extremely-hard"
+          :checked="difficulty === 'extremely-hard'"
+          @change="onChangeDifficulty"
+        >
+        <label for="extremely-hard">Killed John Wick's dog</label>
+      </div>
       <p class="help">Use arrow keys to play the game</p>
     </div>
   </div>
@@ -39,6 +97,11 @@ export default {
     enemyImg.src = 'images/Red_character.png'
     const canvasWidth = 400
     const canvasHeight = 225
+    const difficultyMultiplier = {
+      normal: 1,
+      hard: 0.8,
+      'extremely-hard': 0.5,
+    }
     onMounted(() => {
       document.addEventListener('keydown', (e) => {
         handleKeyDown(e)
@@ -131,56 +194,71 @@ export default {
     })
     const lastFrame = ref(0)
     const startTime = ref()
-    const enemyUnits = ref([
-      {
-        currentX: 0,
-        currentY: canvasHeight / 5,
-        movement: 'y',
-        slowness: 20,
-      },
-      {
-        currentX: (canvasWidth / 3) - unitSize / 2,
-        currentY: canvasHeight / 5,
-        movement: 'y',
-        slowness: 30,
-      },
-      {
-        currentX: canvasWidth - (canvasWidth / 3) - unitSize / 2,
-        currentY: canvasHeight - (canvasHeight / 3),
-        movement: 'y',
-        slowness: 35,
-      },
-      {
-        currentX: canvasWidth - unitSize,
-        currentY: canvasHeight - (canvasHeight / 3),
-        movement: 'y',
-        slowness: 25,
-      },
-      {
-        currentX: (canvasWidth / 2) - unitSize / 2,
-        currentY: (canvasHeight / 2) - unitSize / 2,
-        movement: 'x',
-        slowness: 40,
-      },
-      {
-        currentX: (canvasWidth / 2) - unitSize / 2,
-        currentY: 0,
-        movement: 'x',
-        slowness: 20,
-      },
-      {
-        currentX: (canvasWidth / 2) - unitSize / 2,
-        currentY: canvasHeight - unitSize,
-        movement: 'x',
-        slowness: 25,
-      },
-    ])
     const reachedEnd = ref(false)
     const finished = ref(false)
     const startLineColor = ref('gray')
     const endLineColor = ref('gray')
     const started = ref(false)
     const playerDirection = ref('right')
+    const difficulty = ref('normal')
+    const enemyUnits = ref([
+      {
+        currentX: 0,
+        currentY: canvasHeight / 5,
+        movement: 'y',
+        slowness: 20 * difficultyMultiplier[difficulty.value],
+        baseSlowness: 20,
+      },
+      {
+        currentX: (canvasWidth / 3) - unitSize / 2,
+        currentY: canvasHeight / 5,
+        movement: 'y',
+        slowness: 30 * difficultyMultiplier[difficulty.value],
+        baseSlowness: 30,
+      },
+      {
+        currentX: canvasWidth - (canvasWidth / 3) - unitSize / 2,
+        currentY: canvasHeight - (canvasHeight / 3),
+        movement: 'y',
+        slowness: 35 * difficultyMultiplier[difficulty.value],
+        baseSlowness: 35,
+      },
+      {
+        currentX: canvasWidth - unitSize,
+        currentY: canvasHeight - (canvasHeight / 3),
+        movement: 'y',
+        slowness: 25 * difficultyMultiplier[difficulty.value],
+        baseSlowness: 25,
+      },
+      {
+        currentX: (canvasWidth / 2) - unitSize / 2,
+        currentY: (canvasHeight / 2) - unitSize / 2,
+        movement: 'x',
+        slowness: 40 * difficultyMultiplier[difficulty.value],
+        baseSlowness: 40,
+      },
+      {
+        currentX: (canvasWidth / 2) - unitSize / 2,
+        currentY: 0,
+        movement: 'x',
+        slowness: 20 * difficultyMultiplier[difficulty.value],
+        baseSlowness: 20,
+      },
+      {
+        currentX: (canvasWidth / 2) - unitSize / 2,
+        currentY: canvasHeight - unitSize,
+        movement: 'x',
+        slowness: 25 * difficultyMultiplier[difficulty.value],
+        baseSlowness: 25,
+      },
+    ])
+
+    const onChangeDifficulty = (e) => {
+      difficulty.value = e.target.value
+      for (const enemy of enemyUnits.value) {
+        enemy.slowness = enemy.baseSlowness * difficultyMultiplier[e.target.value]
+      }
+    }
 
     const checkReachedEnd = () => {
       if (reachedEnd.value) return
@@ -290,6 +368,8 @@ export default {
       onRestart,
       started,
       onStart,
+      difficulty,
+      onChangeDifficulty,
     }
   }
 }
@@ -317,6 +397,7 @@ export default {
   border: 5px solid red;
   color: yellow;
   font-weight: bold;
+  font-size: 14px;
 }
 
 .ph-game .instruction button {
@@ -341,5 +422,10 @@ export default {
 
 .help {
   font-size: 12px;
+}
+
+.difficulty {
+  display: flex;
+  margin-bottom: 5px;
 }
 </style>
