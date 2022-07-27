@@ -14,9 +14,13 @@ export default {
       let myGamePiece;
       let myObstacles = [];
       let myScore;
+      let bgImg = new Image();
+      let playerImg = new Image();
 
-      function startGame() {
-          myGamePiece = new component(30, 30, "red", 10, 120);
+      async function startGame() {
+          await loadBgImg();
+          await loadPlayerImg();
+          myGamePiece = new component(30, 30, "red", 10, 120, 'player');
           myGamePiece.gravity = 0.05;
           myScore = new component("30px", "Consolas", "black", 280, 40, "text");
           myGameArea.start();
@@ -53,6 +57,8 @@ export default {
                   ctx.font = this.width + " " + this.height;
                   ctx.fillStyle = color;
                   ctx.fillText(this.text, this.x, this.y);
+              } else if (this.type == 'player') {
+                drawPlayerImg(this.x, this.y);
               } else {
                   ctx.fillStyle = color;
                   ctx.fillRect(this.x, this.y, this.width, this.height);
@@ -96,6 +102,7 @@ export default {
               } 
           }
           myGameArea.clear();
+          drawBgImg();
           myGameArea.frameNo += 1;
           if (myGameArea.frameNo == 1 || everyinterval(150)) {
               x = myGameArea.canvas.width;
@@ -139,6 +146,30 @@ export default {
           // up
           accelerate(0.05);
         }
+      }
+
+      function drawBgImg() {
+        let ctx = myGameArea.context;
+        ctx.drawImage(bgImg, 0, 0);
+      }
+
+      async function loadBgImg() {
+        bgImg.src = 'images/clouds.jpg';
+        bgImg.onload = () => {
+          return Promise.resolve('success');
+        }
+      }
+
+      async function loadPlayerImg() {
+        playerImg.src = 'images/sm-logo-app-colour-136.png';
+        playerImg.onload = () => {
+          return Promise.resolve('success');
+        }
+      }
+
+      function drawPlayerImg(x, y) {
+        let ctx = myGameArea.context;
+        ctx.drawImage(playerImg, x, y, 30, 30);
       }
 
       startGame();
