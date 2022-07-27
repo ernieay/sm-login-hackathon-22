@@ -1,6 +1,6 @@
 <template>
   <div>
-    <img src="@/assets/xmas.webp" class="workspace"/>
+    <img src="@/assets/hackathon_xmas.gif" class="workspace"/>
   </div>
 </template>
 
