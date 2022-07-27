@@ -6,6 +6,7 @@ import PhDoodleView from '../views/PhDoodleView.vue'
 import PhGameView from '../views/PhGameView.vue'
 import XmasView from '../views/XmasView.vue'
 import LoggedInView from '../views/LoggedInView.vue'
+import SiteminderIPODoodleView from '../views/SiteminderIPODoodleView.vue'
 
 const routes = [
   {
@@ -42,6 +43,11 @@ const routes = [
     path: '/loggedin',
     name: 'logged in',
     component: LoggedInView
+  },
+  {
+    path: '/au-ipo',
+    name: 'au ipo',
+    component: SiteminderIPODoodleView
   },
 ]
 

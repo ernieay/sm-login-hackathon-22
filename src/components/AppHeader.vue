@@ -10,6 +10,7 @@
         <router-link to="/au-doodle">26 July (Hackathon)</router-link>
         <router-link to="/ph-doodle">PH Doodle</router-link>
         <router-link to="/ph-game">PH Game</router-link>
+        <router-link to="/au-ipo">08 November (SiteMinder IPO)</router-link>
         <router-link to="/xmas">25 Dec (Christmas)</router-link>
       </div>
     </div>
