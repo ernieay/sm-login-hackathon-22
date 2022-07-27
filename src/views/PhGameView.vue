@@ -29,16 +29,31 @@ export default {
       ctx.value = _ctx
 
       refreshCanvas(_canvas, _ctx, 16)
-
-      // animate()
     })
 
     const refreshCanvas = (gameCanvas, gameContext, dt) => {
       // draw field
+      gameContext.fillStyle = 'lightyellow'
+      gameContext.fillRect(0, 0, gameCanvas.width, gameCanvas.height)
+      gameContext.strokeStyle = 'black'
+      gameContext.lineWidth = 1
       gameContext.strokeRect(0, 0, gameCanvas.width, gameCanvas.height)
       gameContext.strokeRect(0, 0, gameCanvas.width, gameCanvas.height / 2)
       gameContext.strokeRect(0, 0, gameCanvas.width / 3, gameCanvas.height)
       gameContext.strokeRect(0, 0, (gameCanvas.width - (gameCanvas.width / 3)), gameCanvas.height)
+
+      gameContext.strokeStyle = startLineColor.value
+      gameContext.lineWidth = 6
+      gameContext.beginPath()
+      gameContext.moveTo(0, 0)
+      gameContext.lineTo(0, canvasHeight)
+      gameContext.stroke()
+
+      gameContext.strokeStyle = endLineColor.value
+      gameContext.beginPath()
+      gameContext.moveTo(canvasWidth, 0)
+      gameContext.lineTo(canvasWidth, canvasHeight)
+      gameContext.stroke()
 
       // draw player
       let newPlayerX = playerPosition.value.currentX + ((playerPosition.value.x - playerPosition.value.currentX) / dt)
@@ -54,10 +69,10 @@ export default {
         let newEnemyX = enemy.currentX
         let newEnemyY = enemy.currentY
         if (enemy.movement === 'x') {
-          newEnemyX = enemy.currentX + ((newPlayerX - enemy.currentX) / 50)
+          newEnemyX = enemy.currentX + ((newPlayerX - enemy.currentX) / enemy.slowness)
         }
         if (enemy.movement === 'y') {
-          newEnemyY = enemy.currentY + ((newPlayerY - enemy.currentY) / 50)
+          newEnemyY = enemy.currentY + ((newPlayerY - enemy.currentY) / enemy.slowness)
         }
         gameContext.fillRect(newEnemyX, newEnemyY, unitSize, unitSize)
         enemy.currentX = newEnemyX
@@ -73,30 +88,77 @@ export default {
     const canvas = ref()
     const animationId = ref()
     const playerPosition = ref({
-      currentX: 0,
-      currentY: 0,
-      x: 0,
-      y: 0,
+      currentX: 50,
+      currentY: 50,
+      x: 50,
+      y: 50,
     })
     const lastFrame = ref(0)
     const startTime = ref()
     const enemyUnits = ref([
       {
+        currentX: 0,
+        currentY: canvasHeight / 5,
+        movement: 'y',
+        slowness: 20,
+      },
+      {
         currentX: (canvasWidth / 3) - unitSize / 2,
         currentY: canvasHeight / 5,
         movement: 'y',
+        slowness: 30,
       },
       {
         currentX: canvasWidth - (canvasWidth / 3) - unitSize / 2,
         currentY: canvasHeight - (canvasHeight / 3),
         movement: 'y',
+        slowness: 35,
+      },
+      {
+        currentX: canvasWidth - unitSize,
+        currentY: canvasHeight - (canvasHeight / 3),
+        movement: 'y',
+        slowness: 25,
       },
       {
         currentX: (canvasWidth / 2) - unitSize / 2,
         currentY: (canvasHeight / 2) - unitSize / 2,
         movement: 'x',
+        slowness: 40,
+      },
+      {
+        currentX: (canvasWidth / 2) - unitSize / 2,
+        currentY: 0,
+        movement: 'x',
+        slowness: 20,
+      },
+      {
+        currentX: (canvasWidth / 2) - unitSize / 2,
+        currentY: canvasHeight - unitSize,
+        movement: 'x',
+        slowness: 25,
       },
     ])
+    const reachedEnd = ref(false)
+    const finished = ref(false)
+    const startLineColor = ref('gray')
+    const endLineColor = ref('gray')
+
+    const checkReachedEnd = () => {
+      if (reachedEnd.value) return
+      if (playerPosition.value.currentX + unitSize >= (canvasWidth - 5)) {
+        reachedEnd.value = true
+        endLineColor.value = 'lightgreen'
+      }
+    }
+
+    const checkFinished = () => {
+      if (finished.value) return
+      if (playerPosition.value.currentX <= 5 && reachedEnd.value) {
+        finished.value = true
+        startLineColor.value = 'lightgreen'
+      }
+    }
 
     const checkCollission = () => {
       for (const enemy of enemyUnits.value) {
@@ -106,10 +168,14 @@ export default {
           && (playerPosition.value.currentY + unitSize) >= enemy.currentY
           && (playerPosition.value.currentY) <= (enemy.currentY + unitSize)
         ) {
-          playerPosition.value.currentX = 0
-          playerPosition.value.x = 0
-          playerPosition.value.currentY = 0
-          playerPosition.value.y = 0
+          playerPosition.value.currentX = 50
+          playerPosition.value.x = 50
+          playerPosition.value.currentY = 50
+          playerPosition.value.y = 50
+          reachedEnd.value = false
+          finished.value = false
+          startLineColor.value = 'gray'
+          endLineColor.value = 'gray'
         }
       }
     }
@@ -131,6 +197,9 @@ export default {
       refreshCanvas(canvas.value, ctx.value, dt)
 
       checkCollission()
+
+      checkReachedEnd()
+      checkFinished()
 
       animationId.value = requestAnimationFrame(animate)
     }
