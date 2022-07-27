@@ -22,17 +22,16 @@ export default {
     const doABarrelRoll = function(){var a="-webkit-",b='transform:rotate(1turn);',c='transition:4s;';document.head.innerHTML+='<style>body{'+a+b+a+c+b+c}
 
     const allowedKeys = {
-      68: 'd',
-      69: 'e',
-      73: 'i',
-      77: 'm',
+      65: 'a',
+      67: 'c',
+      72: 'h',
+      75: 'k',
       78: 'n',
-      82: 'r',
-      83: 's',
+      79: 'o',
       84: 't',
     }
 
-    const cheatCode = ['s', 'i', 't', 'e', 'm', 'i', 'n', 'd', 'e', 'r']
+    const cheatCode = ['h', 'a', 'c', 'k', 'a', 't', 'h', 'o', 'n']
 
     let keysPosition = 0;
 
