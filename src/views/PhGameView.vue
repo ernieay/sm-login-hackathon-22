@@ -285,7 +285,7 @@ export default {
 
 .ph-game .instruction {
   position: absolute;
-  top: 150px;
+  top: 140px;
   left: 50%;
   padding: 10px;
   width: 300px;
@@ -297,9 +297,19 @@ export default {
 }
 
 .ph-game .instruction button {
-  background-color: white;
   border-width: 1px;
   margin: 10px;
+  font-weight: bold;
+  background: none;
+  border: none;
+  color: yellow;
+  font-size: 24px;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.ph-game .instruction button:hover {
+  text-decoration: underline;
 }
 
 .ph-game .instruction p {
