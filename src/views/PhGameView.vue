@@ -89,10 +89,10 @@ export default {
         let newEnemyX = enemy.currentX
         let newEnemyY = enemy.currentY
         if (enemy.movement === 'x' && !finished.value) {
-          newEnemyX = enemy.currentX + ((newPlayerX - enemy.currentX) / 200)
+          newEnemyX = enemy.currentX + ((newPlayerX - enemy.currentX) / enemy.slowness)
         }
         if (enemy.movement === 'y' && !finished.value) {
-          newEnemyY = enemy.currentY + ((newPlayerY - enemy.currentY) / 200)
+          newEnemyY = enemy.currentY + ((newPlayerY - enemy.currentY) / enemy.slowness)
         }
         gameContext.fillRect(newEnemyX, newEnemyY, unitSize, unitSize)
         enemy.currentX = newEnemyX
