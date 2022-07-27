@@ -7,6 +7,11 @@
 <script>
 import { onMounted } from '@vue/runtime-core'
 
+const PLAYER_SIZE = 70;
+const WALL_GAP_MIN = 100;
+const WALL_GAP_MAX = 200;
+const WALL_CREATE_FREQUENCY = 200;
+
 export default {
   name: 'AuGame',
   setup: () => {
@@ -20,9 +25,9 @@ export default {
       async function startGame() {
           await loadBgImg();
           await loadPlayerImg();
-          myGamePiece = new component(30, 30, "red", 10, 120, 'player');
+          myGamePiece = new component(PLAYER_SIZE, PLAYER_SIZE, "red", 10, 120, 'player');
           myGamePiece.gravity = 0.05;
-          myScore = new component("30px", "Consolas", "black", 280, 40, "text");
+          myScore = new component("30px", "Consolas", "black", 370, 40, "text");
           myGameArea.start();
       }
 
@@ -104,13 +109,13 @@ export default {
           myGameArea.clear();
           drawBgImg();
           myGameArea.frameNo += 1;
-          if (myGameArea.frameNo == 1 || everyinterval(150)) {
+          if (myGameArea.frameNo == 1 || everyinterval(WALL_CREATE_FREQUENCY)) {
               x = myGameArea.canvas.width;
               minHeight = 20;
               maxHeight = 200;
               height = Math.floor(Math.random()*(maxHeight-minHeight+1)+minHeight);
-              minGap = 50;
-              maxGap = 200;
+              minGap = WALL_GAP_MIN;
+              maxGap = WALL_GAP_MAX;
               gap = Math.floor(Math.random()*(maxGap-minGap+1)+minGap);
               myObstacles.push(new component(10, height, "green", x, 0));
               myObstacles.push(new component(10, x - height - gap, "green", x, height + gap));
@@ -161,7 +166,7 @@ export default {
       }
 
       async function loadPlayerImg() {
-        playerImg.src = 'images/sm-logo-app-colour-136.png';
+        playerImg.src = 'images/flappy_hotelier.png';
         playerImg.onload = () => {
           return Promise.resolve('success');
         }
@@ -169,7 +174,7 @@ export default {
 
       function drawPlayerImg(x, y) {
         let ctx = myGameArea.context;
-        ctx.drawImage(playerImg, x, y, 30, 30);
+        ctx.drawImage(playerImg, x, y, PLAYER_SIZE, PLAYER_SIZE);
       }
 
       startGame();
