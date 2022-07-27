@@ -51,7 +51,7 @@ export default {
           this.width = width;
           this.height = height;
           this.speedX = 0;
-          this.speedY = 0;    
+          this.speedY = 0;
           this.x = x;
           this.y = y;
           this.gravity = 0;
@@ -104,7 +104,7 @@ export default {
           for (let i = 0; i < myObstacles.length; i += 1) {
               if (myGamePiece.crashWith(myObstacles[i])) {
                   return;
-              } 
+              }
           }
           myGameArea.clear();
           drawBgImg();
@@ -117,8 +117,8 @@ export default {
               minGap = WALL_GAP_MIN;
               maxGap = WALL_GAP_MAX;
               gap = Math.floor(Math.random()*(maxGap-minGap+1)+minGap);
-              myObstacles.push(new component(10, height, "green", x, 0));
-              myObstacles.push(new component(10, x - height - gap, "green", x, height + gap));
+              myObstacles.push(new component(10, height, '#0C4583', x, 0));
+              myObstacles.push(new component(10, x - height - gap, "#0C4583", x, height + gap));
           }
           for (let i = 0; i < myObstacles.length; i += 1) {
               myObstacles[i].x += -1;
@@ -155,11 +155,11 @@ export default {
 
       function drawBgImg() {
         let ctx = myGameArea.context;
-        ctx.drawImage(bgImg, 0, 0);
+        ctx.drawImage(bgImg, 0, 0, 480, 270);
       }
 
       async function loadBgImg() {
-        bgImg.src = 'images/clouds.jpg';
+        bgImg.src = 'images/FH_background.png'
         bgImg.onload = () => {
           return Promise.resolve('success');
         }
