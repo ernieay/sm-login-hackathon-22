@@ -2,13 +2,17 @@
   <div class="ph-game">
     <canvas id="patintero" class="workspace">
     </canvas>
-    <button
-      class="restart-button"
-      v-if="finished"
-      @click="onRestart"
-    >
-      Restart
-    </button>
+    <div v-if="finished" class="instruction">
+      <p>You won!</p>
+      <p>Thank you for playing the game and here's some huge imaginary cash prize.</p>
+      <p>💰💰💰💰💰💰💰</p>
+      <button
+        class="restart-button"
+        @click="onRestart"
+      >
+        Play again
+      </button>
+    </div>
     <div v-if="!started" class="instruction">
       <p>"Patintero"</p>
       <p>A famous children game in the Philippines.</p>
@@ -16,6 +20,7 @@
       <button @click="onStart">
         Play
       </button>
+      <p class="help">Use arrow keys to play the game</p>
     </div>
   </div>
 </template>
@@ -84,10 +89,10 @@ export default {
         let newEnemyX = enemy.currentX
         let newEnemyY = enemy.currentY
         if (enemy.movement === 'x' && !finished.value) {
-          newEnemyX = enemy.currentX + ((newPlayerX - enemy.currentX) / enemy.slowness)
+          newEnemyX = enemy.currentX + ((newPlayerX - enemy.currentX) / 200)
         }
         if (enemy.movement === 'y' && !finished.value) {
-          newEnemyY = enemy.currentY + ((newPlayerY - enemy.currentY) / enemy.slowness)
+          newEnemyY = enemy.currentY + ((newPlayerY - enemy.currentY) / 200)
         }
         gameContext.fillRect(newEnemyX, newEnemyY, unitSize, unitSize)
         enemy.currentX = newEnemyX
@@ -274,18 +279,9 @@ export default {
   position: relative;
 }
 
-.ph-game .restart-button {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background-color: white;
-  border-width: 1px;
-}
-
 .ph-game .instruction {
   position: absolute;
-  top: 140px;
+  top: 130px;
   left: 50%;
   padding: 10px;
   width: 300px;
@@ -314,5 +310,9 @@ export default {
 
 .ph-game .instruction p {
   margin: 0;
+}
+
+.help {
+  font-size: 12px;
 }
 </style>
