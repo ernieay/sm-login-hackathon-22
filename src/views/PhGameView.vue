@@ -2,6 +2,21 @@
   <div class="ph-game">
     <canvas id="patintero" class="workspace">
     </canvas>
+    <button
+      class="restart-button"
+      v-if="finished"
+      @click="onRestart"
+    >
+      Restart
+    </button>
+    <div v-if="!started" class="instruction">
+      <p>"Patintero"</p>
+      <p>A famous children game in the Philippines.</p>
+      <p>Cross the field back and forth without being touched.</p>
+      <button @click="onStart">
+        Play
+      </button>
+    </div>
   </div>
 </template>
 
@@ -68,10 +83,10 @@ export default {
       for (const enemy of enemyUnits.value) {
         let newEnemyX = enemy.currentX
         let newEnemyY = enemy.currentY
-        if (enemy.movement === 'x') {
+        if (enemy.movement === 'x' && !finished.value) {
           newEnemyX = enemy.currentX + ((newPlayerX - enemy.currentX) / enemy.slowness)
         }
-        if (enemy.movement === 'y') {
+        if (enemy.movement === 'y' && !finished.value) {
           newEnemyY = enemy.currentY + ((newPlayerY - enemy.currentY) / enemy.slowness)
         }
         gameContext.fillRect(newEnemyX, newEnemyY, unitSize, unitSize)
@@ -143,6 +158,7 @@ export default {
     const finished = ref(false)
     const startLineColor = ref('gray')
     const endLineColor = ref('gray')
+    const started = ref(false)
 
     const checkReachedEnd = () => {
       if (reachedEnd.value) return
@@ -168,14 +184,7 @@ export default {
           && (playerPosition.value.currentY + unitSize) >= enemy.currentY
           && (playerPosition.value.currentY) <= (enemy.currentY + unitSize)
         ) {
-          playerPosition.value.currentX = 50
-          playerPosition.value.x = 50
-          playerPosition.value.currentY = 50
-          playerPosition.value.y = 50
-          reachedEnd.value = false
-          finished.value = false
-          startLineColor.value = 'gray'
-          endLineColor.value = 'gray'
+          onRestart()
         }
       }
     }
@@ -196,19 +205,17 @@ export default {
 
       refreshCanvas(canvas.value, ctx.value, dt)
 
-      checkCollission()
-
-      checkReachedEnd()
-      checkFinished()
+      if (!finished.value) {
+        checkCollission()
+        checkReachedEnd()
+        checkFinished()
+      }
 
       animationId.value = requestAnimationFrame(animate)
     }
 
     const handleKeyDown = (e) => {
-      if (!animationId.value) {
-        animationId.value = requestAnimationFrame(animate)
-        // animate()
-      }
+      if (!started.value) return
 
       if (e.keyCode === 37) {
         // left
@@ -236,6 +243,66 @@ export default {
       }
     }
 
+    const onRestart = () => {
+      playerPosition.value.currentX = 50
+      playerPosition.value.x = 50
+      playerPosition.value.currentY = 50
+      playerPosition.value.y = 50
+      reachedEnd.value = false
+      finished.value = false
+      startLineColor.value = 'gray'
+      endLineColor.value = 'gray'
+    }
+
+    const onStart = () => {
+      animationId.value = requestAnimationFrame(animate)
+      started.value = true
+    }
+
+    return {
+      finished,
+      onRestart,
+      started,
+      onStart,
+    }
   }
 }
 </script>
+
+<style scoped>
+.ph-game {
+  position: relative;
+}
+
+.ph-game .restart-button {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  border-width: 1px;
+}
+
+.ph-game .instruction {
+  position: absolute;
+  top: 150px;
+  left: 50%;
+  padding: 10px;
+  width: 300px;
+  transform: translateX(-50%);
+  background-color: #0000ffe3;
+  border: 5px solid red;
+  color: yellow;
+  font-weight: bold;
+}
+
+.ph-game .instruction button {
+  background-color: white;
+  border-width: 1px;
+  margin: 10px;
+}
+
+.ph-game .instruction p {
+  margin: 0;
+}
+</style>
