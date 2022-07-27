@@ -1,11 +1,17 @@
 <template>
   <div class="au-game">
-    <canvas id="game-canvas" class="workspace"></canvas>
+    <div v-if="!started" class="instruction">
+      <p class="title">Flappy Hotelier</p>
+      <p>Use the <strong>Up</strong> arrow to dodge the obstacles!</p>
+      <button @click="onStartClick">Start</button>
+    </div>
+    <canvas id="game-canvas" class="workspace" :class="{ started: started }"></canvas>
   </div>
 </template>
 
 <script>
-import { onMounted } from '@vue/runtime-core'
+import { onMounted, onBeforeUnmount } from '@vue/runtime-core'
+import { ref } from 'vue'
 
 const PLAYER_SIZE = 70;
 const WALL_GAP_MIN = 110;
@@ -15,6 +21,10 @@ const WALL_CREATE_FREQUENCY = 200;
 export default {
   name: 'AuGame',
   setup: () => {
+    let audio = new Audio('audio/flappy.m4a');
+    const started = ref(false);
+    let myGameArea = null;
+
     onMounted(() => {
       let myGamePiece;
       let myObstacles = [];
@@ -23,120 +33,120 @@ export default {
       let playerImg = new Image();
 
       async function startGame() {
-          await loadBgImg();
-          await loadPlayerImg();
-          myGamePiece = new component(PLAYER_SIZE, PLAYER_SIZE, "red", 10, 120, 'player');
-          myGamePiece.gravity = 0.05;
-          myScore = new component("30px", "Consolas", "black", 370, 40, "text");
-          myGameArea.start();
+        await loadBgImg();
+        await loadPlayerImg();
+
+        myGamePiece = new component(PLAYER_SIZE, PLAYER_SIZE, "red", 10, 120, 'player');
+        myGamePiece.gravity = 0.05;
+        myScore = new component("30px", "Consolas", "black", 370, 40, "text");
       }
 
-      const myGameArea = {
-          canvas : document.getElementById("game-canvas"),
-          start : function() {
-              this.canvas.width = 480;
-              this.canvas.height = 270;
-              this.context = this.canvas.getContext("2d");
-              this.frameNo = 0;
-              this.interval = setInterval(updateGameArea, 20);
-              },
-          clear : function() {
-              this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
-          }
+      myGameArea = {
+        canvas: document.getElementById("game-canvas"),
+        start: function () {
+          this.canvas.width = 480;
+          this.canvas.height = 270;
+          this.context = this.canvas.getContext("2d");
+          this.frameNo = 0;
+          this.interval = setInterval(updateGameArea, 20);
+        },
+        clear: function () {
+          this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        }
       }
 
       function component(width, height, color, x, y, type) {
-          this.type = type;
-          this.score = 0;
-          this.width = width;
-          this.height = height;
-          this.speedX = 0;
-          this.speedY = 0;
-          this.x = x;
-          this.y = y;
-          this.gravity = 0;
-          this.gravitySpeed = 0;
-          this.update = function() {
-              let ctx = myGameArea.context;
-              if (this.type == "text") {
-                  ctx.font = this.width + " " + this.height;
-                  ctx.fillStyle = color;
-                  ctx.fillText(this.text, this.x, this.y);
-              } else if (this.type == 'player') {
-                drawPlayerImg(this.x, this.y);
-              } else {
-                  ctx.fillStyle = color;
-                  ctx.fillRect(this.x, this.y, this.width, this.height);
-              }
+        this.type = type;
+        this.score = 0;
+        this.width = width;
+        this.height = height;
+        this.speedX = 0;
+        this.speedY = 0;
+        this.x = x;
+        this.y = y;
+        this.gravity = 0;
+        this.gravitySpeed = 0;
+        this.update = function () {
+          let ctx = myGameArea.context;
+          if (this.type == "text") {
+            ctx.font = this.width + " " + this.height;
+            ctx.fillStyle = color;
+            ctx.fillText(this.text, this.x, this.y);
+          } else if (this.type == 'player') {
+            drawPlayerImg(this.x, this.y);
+          } else {
+            ctx.fillStyle = color;
+            ctx.fillRect(this.x, this.y, this.width, this.height);
           }
-          this.newPos = function() {
-              this.gravitySpeed += this.gravity;
-              this.x += this.speedX;
-              this.y += this.speedY + this.gravitySpeed;
-              this.hitBottom();
+        }
+        this.newPos = function () {
+          this.gravitySpeed += this.gravity;
+          this.x += this.speedX;
+          this.y += this.speedY + this.gravitySpeed;
+          this.hitBottom();
+        }
+        this.hitBottom = function () {
+          var rockbottom = myGameArea.canvas.height - this.height;
+          if (this.y > rockbottom) {
+            this.y = rockbottom;
+            this.gravitySpeed = 0;
           }
-          this.hitBottom = function() {
-              var rockbottom = myGameArea.canvas.height - this.height;
-              if (this.y > rockbottom) {
-                  this.y = rockbottom;
-                  this.gravitySpeed = 0;
-              }
+        }
+        this.crashWith = function (otherobj) {
+          var myleft = this.x;
+          var myright = this.x + (this.width);
+          var mytop = this.y;
+          var mybottom = this.y + (this.height);
+          var otherleft = otherobj.x;
+          var otherright = otherobj.x + (otherobj.width);
+          var othertop = otherobj.y;
+          var otherbottom = otherobj.y + (otherobj.height);
+          var crash = true;
+          if ((mybottom < othertop) || (mytop > otherbottom) || (myright < otherleft) || (myleft > otherright)) {
+            crash = false;
           }
-          this.crashWith = function(otherobj) {
-              var myleft = this.x;
-              var myright = this.x + (this.width);
-              var mytop = this.y;
-              var mybottom = this.y + (this.height);
-              var otherleft = otherobj.x;
-              var otherright = otherobj.x + (otherobj.width);
-              var othertop = otherobj.y;
-              var otherbottom = otherobj.y + (otherobj.height);
-              var crash = true;
-              if ((mybottom < othertop) || (mytop > otherbottom) || (myright < otherleft) || (myleft > otherright)) {
-                  crash = false;
-              }
-              return crash;
-          }
+          return crash;
+        }
       }
 
       function updateGameArea() {
-          var x, height, gap, minHeight, maxHeight, minGap, maxGap;
-          for (let i = 0; i < myObstacles.length; i += 1) {
-              if (myGamePiece.crashWith(myObstacles[i])) {
-                  return;
-              }
+        var x, height, gap, minHeight, maxHeight, minGap, maxGap;
+        for (let i = 0; i < myObstacles.length; i += 1) {
+          if (myGamePiece.crashWith(myObstacles[i])) {
+            return;
           }
-          myGameArea.clear();
-          drawBgImg();
-          myGameArea.frameNo += 1;
-          if (myGameArea.frameNo == 1 || everyinterval(WALL_CREATE_FREQUENCY)) {
-              x = myGameArea.canvas.width;
-              minHeight = 20;
-              maxHeight = 200;
-              height = Math.floor(Math.random()*(maxHeight-minHeight+1)+minHeight);
-              minGap = WALL_GAP_MIN;
-              maxGap = WALL_GAP_MAX;
-              gap = Math.floor(Math.random()*(maxGap-minGap+1)+minGap);
-              myObstacles.push(new component(10, height, '#0C4583', x, 0));
-              myObstacles.push(new component(10, x - height - gap, "#0C4583", x, height + gap));
-          }
-          for (let i = 0; i < myObstacles.length; i += 1) {
-              myObstacles[i].x += -1;
-              myObstacles[i].update();
-          }
-          myScore.text=myGameArea.frameNo;
-          myScore.update();
-          myGamePiece.newPos();
-          myGamePiece.update();
+        }
+        myGameArea.clear();
+        drawBgImg();
+        myGameArea.frameNo += 1;
+        if (myGameArea.frameNo == 1 || everyinterval(WALL_CREATE_FREQUENCY)) {
+          x = myGameArea.canvas.width;
+          minHeight = 20;
+          maxHeight = 200;
+          height = Math.floor(Math.random() * (maxHeight - minHeight + 1) + minHeight);
+          minGap = WALL_GAP_MIN;
+          maxGap = WALL_GAP_MAX;
+          gap = Math.floor(Math.random() * (maxGap - minGap + 1) + minGap);
+          myObstacles.push(new component(10, height, '#0C4583', x, 0));
+          myObstacles.push(new component(10, x - height - gap, "#0C4583", x, height + gap));
+        }
+        for (let i = 0; i < myObstacles.length; i += 1) {
+          myObstacles[i].x += -1;
+          myObstacles[i].update();
+        }
+        myScore.text = myGameArea.frameNo;
+        myScore.update();
+        myGamePiece.newPos();
+        myGamePiece.update();
       }
 
       function everyinterval(n) {
-          if ((myGameArea.frameNo / n) % 1 == 0) {return true;}
-          return false;
+        if ((myGameArea.frameNo / n) % 1 == 0) { return true; }
+        return false;
       }
 
       function accelerate(n) {
-          myGamePiece.gravity = n;
+        myGamePiece.gravity = n;
       }
 
       const handleKeyDown = (e) => {
@@ -177,7 +187,6 @@ export default {
         ctx.drawImage(playerImg, x, y, PLAYER_SIZE, PLAYER_SIZE);
       }
 
-      startGame();
       document.addEventListener('keydown', (e) => {
         handleKeyDown(e)
       });
@@ -185,7 +194,69 @@ export default {
       document.addEventListener('keyup', (e) => {
         handleKeyUp(e)
       })
+      startGame();
     })
-  }
+
+    onBeforeUnmount(() => {
+      audio.pause();
+      audio = null;
+    })
+
+    const onStartClick = () => {
+      started.value = true;
+      audio.play();
+      myGameArea.start();
+    }
+
+    return {
+      started,
+      onStartClick
+    };
+  },
+
 }
 </script>
+<style scoped>
+#game-canvas {
+  visibility: hidden;
+  height: 0;
+}
+
+#game-canvas.started {
+  visibility: visible;
+  height: auto;
+}
+
+.instruction {
+  width: 400px;
+  margin-top: 128px;
+  margin-left: auto;
+  margin-right: auto;
+  background: blue;
+  padding: 32px;
+  border-radius: 8px;
+  color: white;
+}
+
+.instruction button {
+  border-radius: 8px;
+  padding: 8px;
+  font-weight: bold;
+  background: none;
+  border: none;
+  color: yellow;
+  font-size: 24px;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.instruction button:hover {
+  background: yellow;
+  color: black;
+}
+
+.instruction .title {
+  font-size: 32px;
+  font-weight: bold;
+}
+</style>
