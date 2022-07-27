@@ -1,12 +1,16 @@
 <template>
   <div class="xmas">
-    <h1>This is christmas page</h1>
+    <XmasDoodle/>
   </div>
 </template>
 
 <script>
+import XmasDoodle from '@/components/XmasDoodle.vue'
 
 export default {
   name: 'PhDoodle',
+  components: {
+    XmasDoodle,
+  }
 }
 </script>
