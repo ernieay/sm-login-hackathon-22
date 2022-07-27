@@ -33,6 +33,10 @@ import { onMounted } from '@vue/runtime-core'
 export default {
   name: 'PhGame',
   setup: () => {
+    const playerImg = new Image()
+    playerImg.src = 'images/Blue_character.png'
+    const enemyImg = new Image()
+    enemyImg.src = 'images/Red_character.png'
     const canvasWidth = 400
     const canvasHeight = 225
     onMounted(() => {
@@ -52,18 +56,9 @@ export default {
     })
 
     const refreshCanvas = (gameCanvas, gameContext, dt) => {
-      // draw field
-      gameContext.fillStyle = 'lightyellow'
-      gameContext.fillRect(0, 0, gameCanvas.width, gameCanvas.height)
-      gameContext.strokeStyle = 'black'
-      gameContext.lineWidth = 1
-      gameContext.strokeRect(0, 0, gameCanvas.width, gameCanvas.height)
-      gameContext.strokeRect(0, 0, gameCanvas.width, gameCanvas.height / 2)
-      gameContext.strokeRect(0, 0, gameCanvas.width / 3, gameCanvas.height)
-      gameContext.strokeRect(0, 0, (gameCanvas.width - (gameCanvas.width / 3)), gameCanvas.height)
-
+      // draw start and end lines
+      gameContext.lineWidth = 10
       gameContext.strokeStyle = startLineColor.value
-      gameContext.lineWidth = 6
       gameContext.beginPath()
       gameContext.moveTo(0, 0)
       gameContext.lineTo(0, canvasHeight)
@@ -78,30 +73,51 @@ export default {
       // draw player
       let newPlayerX = playerPosition.value.currentX + ((playerPosition.value.x - playerPosition.value.currentX) / dt)
       let newPlayerY = playerPosition.value.currentY + ((playerPosition.value.y - playerPosition.value.currentY) / dt)
-      gameContext.fillStyle = 'blue'
-      gameContext.fillRect(newPlayerX, newPlayerY, unitSize, unitSize)
+      gameContext.save()
+      gameContext.translate(newPlayerX + unitSize / 2, newPlayerY + unitSize / 2)
+      if (playerDirection.value === 'right') {
+        gameContext.rotate((Math.PI / 180) * 180)
+      }
+      if (playerDirection.value === 'down') {
+        gameContext.rotate((Math.PI / 180) * 270)
+      }
+      if (playerDirection.value === 'up') {
+        gameContext.rotate((Math.PI / 180) * 90)
+      }
+      gameContext.drawImage(playerImg, -(unitSize / 2), -(unitSize / 2), unitSize, unitSize)
+      gameContext.restore()
       playerPosition.value.currentX = newPlayerX
       playerPosition.value.currentY = newPlayerY
 
       // draw enemies
-      gameContext.fillStyle = 'red'
+      // gameContext.fillStyle = 'red'
       for (const enemy of enemyUnits.value) {
         let newEnemyX = enemy.currentX
         let newEnemyY = enemy.currentY
-        if (enemy.movement === 'x' && !finished.value) {
-          newEnemyX = enemy.currentX + ((newPlayerX - enemy.currentX) / enemy.slowness)
+        if (enemy.movement === 'x') {
+          gameContext.save()
+          newEnemyX = finished.value ? newEnemyX : enemy.currentX + ((newPlayerX - enemy.currentX) / enemy.slowness)
+          gameContext.translate(newEnemyX + unitSize / 2, newEnemyY + unitSize / 2)
+          gameContext.rotate((Math.PI / 180) * (newPlayerY > newEnemyY ? 90 : 270))
+          gameContext.drawImage(enemyImg, -(unitSize / 2), -(unitSize / 2), unitSize, unitSize)
+          gameContext.restore()
         }
-        if (enemy.movement === 'y' && !finished.value) {
-          newEnemyY = enemy.currentY + ((newPlayerY - enemy.currentY) / enemy.slowness)
+        if (enemy.movement === 'y') {
+          gameContext.save()
+          newEnemyY = finished.value ? newEnemyY : enemy.currentY + ((newPlayerY - enemy.currentY) / enemy.slowness)
+          gameContext.translate(newEnemyX + unitSize / 2, newEnemyY + unitSize / 2)
+          gameContext.rotate((Math.PI / 180) * (newPlayerX > newEnemyX ? 0 : 180))
+          gameContext.drawImage(enemyImg, -(unitSize / 2), -(unitSize / 2), unitSize, unitSize)
+          gameContext.restore()
         }
-        gameContext.fillRect(newEnemyX, newEnemyY, unitSize, unitSize)
+        // gameContext.fillRect(newEnemyX, newEnemyY, unitSize, unitSize)
         enemy.currentX = newEnemyX
         enemy.currentY = newEnemyY
       }
     }
 
     const moveSize = 20
-    const unitSize = 20
+    const unitSize = 28
     const frameRate = 1000/60
 
     const ctx = ref()
@@ -164,6 +180,7 @@ export default {
     const startLineColor = ref('gray')
     const endLineColor = ref('gray')
     const started = ref(false)
+    const playerDirection = ref('right')
 
     const checkReachedEnd = () => {
       if (reachedEnd.value) return
@@ -184,10 +201,10 @@ export default {
     const checkCollission = () => {
       for (const enemy of enemyUnits.value) {
         if (
-          (playerPosition.value.currentX + unitSize) >= enemy.currentX
-          && (playerPosition.value.currentX) <= (enemy.currentX + unitSize)
-          && (playerPosition.value.currentY + unitSize) >= enemy.currentY
-          && (playerPosition.value.currentY) <= (enemy.currentY + unitSize)
+          (playerPosition.value.currentX + (unitSize * 0.7)) >= enemy.currentX
+          && (playerPosition.value.currentX) <= (enemy.currentX + (unitSize * 0.7))
+          && (playerPosition.value.currentY + (unitSize * 0.7)) >= enemy.currentY
+          && (playerPosition.value.currentY) <= (enemy.currentY + (unitSize * 0.7))
         ) {
           onRestart()
         }
@@ -226,6 +243,7 @@ export default {
         // left
         const newX = playerPosition.value.x - moveSize < 0 ? 0 : playerPosition.value.x - moveSize
         playerPosition.value.x = newX
+        playerDirection.value = 'left'
       }
       if (e.keyCode === 39) {
         // right
@@ -233,11 +251,13 @@ export default {
           ? (canvas.value.width - unitSize)
           : playerPosition.value.x + moveSize
         playerPosition.value.x = newX
+        playerDirection.value = 'right'
       }
       if (e.keyCode === 38) {
         // up
         const newY = playerPosition.value.y - moveSize < 0 ? 0 : playerPosition.value.y - moveSize
         playerPosition.value.y = newY
+        playerDirection.value = 'up'
       }
       if (e.keyCode === 40) {
         // down
@@ -245,6 +265,7 @@ export default {
           ? (canvas.value.height - unitSize)
           : playerPosition.value.y + moveSize
         playerPosition.value.y = newY
+        playerDirection.value = 'down'
       }
     }
 
@@ -275,6 +296,12 @@ export default {
 </script>
 
 <style scoped>
+
+.workspace {
+  background-image: url('../assets/PH_background.png');
+  background-size: cover;
+}
+
 .ph-game {
   position: relative;
 }
@@ -286,7 +313,7 @@ export default {
   padding: 10px;
   width: 300px;
   transform: translateX(-50%);
-  background-color: #0000ffe3;
+  background-color: #0000ffa7;
   border: 5px solid red;
   color: yellow;
   font-weight: bold;
