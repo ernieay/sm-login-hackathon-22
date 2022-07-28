@@ -5,7 +5,7 @@
       <p>Use the <strong>Up</strong> arrow to dodge the obstacles!</p>
       <button @click="onStartClick">Start</button>
     </div>
-    <canvas id="game-canvas" class="workspace" :class="{ started: started }"></canvas>
+    <canvas id="game-canvas" :class="{ started: started }"></canvas>
   </div>
 </template>
 
@@ -38,7 +38,7 @@ export default {
 
         myGamePiece = new component(PLAYER_SIZE, PLAYER_SIZE, "red", 10, 120, 'player');
         myGamePiece.gravity = 0.05;
-        myScore = new component("30px", "Consolas", "black", 370, 40, "text");
+        myScore = new component("30px", "Arial", "black", 370, 40, "text");
       }
 
       myGameArea = {
@@ -217,6 +217,12 @@ export default {
 }
 </script>
 <style scoped>
+.au-game {
+  margin-top: 50px;  
+  max-height: 270px;
+  overflow: hidden;
+}
+
 #game-canvas {
   visibility: hidden;
   height: 0;
@@ -228,14 +234,17 @@ export default {
 }
 
 .instruction {
-  width: 400px;
-  margin-top: 128px;
+  width: 480px;
+  height: 270px;
   margin-left: auto;
   margin-right: auto;
   background: blue;
-  padding: 32px;
   border-radius: 8px;
   color: white;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .instruction button {
@@ -248,6 +257,7 @@ export default {
   font-size: 24px;
   text-transform: uppercase;
   cursor: pointer;
+  font-family: 'Avenir', Helvetica, Arial, sans-serif;
 }
 
 .instruction button:hover {
