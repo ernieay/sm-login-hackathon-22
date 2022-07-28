@@ -79,6 +79,7 @@
         <label for="extremely-hard">Killed John Wick's dog</label>
       </div>
       <p class="help">Use arrow keys to play the game</p>
+      <p class="help">Touch both ends to win the game</p>
     </div>
   </div>
 </template>
@@ -388,7 +389,7 @@ export default {
 
 .ph-game .instruction {
   position: absolute;
-  top: 130px;
+  top: 127px;
   left: 50%;
   padding: 10px;
   width: 300px;
