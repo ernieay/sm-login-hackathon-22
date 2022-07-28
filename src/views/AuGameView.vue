@@ -38,7 +38,7 @@ export default {
 
         myGamePiece = new component(PLAYER_SIZE, PLAYER_SIZE, "red", 10, 120, 'player');
         myGamePiece.gravity = 0.05;
-        myScore = new component("30px", "Arial", "black", 370, 40, "text");
+        myScore = new component("30px", "Arial", "black", 410, 40, "text");
       }
 
       myGameArea = {
@@ -144,7 +144,7 @@ export default {
           myObstacles[i].x += -1;
           myObstacles[i].update();
         }
-        myScore.text = myGameArea.frameNo;
+        myScore.text = Math.floor(myGameArea.frameNo / 300);
         myScore.update();
         myGamePiece.newPos();
         myGamePiece.update();
@@ -162,14 +162,14 @@ export default {
       const handleKeyDown = (e) => {
         if (e.keyCode === 38) {
           // up
-          accelerate(-0.2);
+          accelerate(-0.4);
         }
       }
 
       const handleKeyUp = (e) => {
         if (e.keyCode === 38) {
           // up
-          accelerate(0.05);
+          accelerate(0.15);
         }
       }
 
