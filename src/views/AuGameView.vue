@@ -31,6 +31,7 @@ export default {
       let myScore;
       let bgImg = new Image();
       let playerImg = new Image();
+      const gameOverText = new component("30px", "Arial", "yellow", 110, 130, "text");
 
       async function startGame() {
         await loadBgImg();
@@ -120,6 +121,8 @@ export default {
         var x, height, gap, minHeight, maxHeight, minGap, maxGap;
         for (let i = 0; i < myObstacles.length; i += 1) {
           if (myGamePiece.crashWith(myObstacles[i])) {
+            gameOverText.text = 'Laundry dropped :\'(';
+            gameOverText.update();
             return;
           }
         }
