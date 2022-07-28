@@ -1,7 +1,7 @@
 <template>
   <div class="navbar">
     <div class="dropdown">
-      <button class="dropbtn">Time Travel
+      <button class="dropbtn">Hover Here
         <i class="fa fa-caret-down"></i>
       </button>
       <div class="dropdown-content">
