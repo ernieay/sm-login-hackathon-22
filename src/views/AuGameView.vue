@@ -1,7 +1,6 @@
 <template>
   <div class="au-game">
     <div v-if="!started" class="instruction">
-      <p class="title">Flappy Hotelier</p>
       <p>Use the <strong>Up</strong> arrow to dodge the obstacles!</p>
       <button @click="onStartClick">Start</button>
     </div>
@@ -250,20 +249,22 @@ export default {
   margin-right: auto;
   background: blue;
   border-radius: 8px;
-  color: white;
+  color: black;
   display: flex;
   align-items: center;
   flex-direction: column;
-  justify-content: center;
+  background: url('@/assets/FH_background.png');
+  background-size: contain;
+  padding-top: 30px;
 }
 
 .instruction button {
   border-radius: 8px;
-  padding: 8px;
+  padding: 8px 32px;
   font-weight: bold;
-  background: none;
   border: none;
-  color: yellow;
+  background: #0C4583;
+  color: white;
   font-size: 24px;
   text-transform: uppercase;
   cursor: pointer;
@@ -271,8 +272,8 @@ export default {
 }
 
 .instruction button:hover {
-  background: yellow;
-  color: black;
+  background: white;
+  color: #0C4583;
 }
 
 .instruction .title {
