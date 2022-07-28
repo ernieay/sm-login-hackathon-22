@@ -7,11 +7,11 @@
       <div class="dropdown-content">
         <router-link to="/">Default</router-link>
         <router-link to="/au-game">April 15 (National Laundry Day)</router-link>
+        <router-link to="/dodge-game">June 30 (International Dodge-ball Day)</router-link>
         <router-link to="/au-doodle">26 July (Hackathon)</router-link>
         <router-link to="/ph-game">August (Buwan ng Wika)</router-link>
         <router-link to="/au-ipo">08 November (SiteMinder IPO)</router-link>
         <router-link to="/xmas">25 Dec (Christmas)</router-link>
-        <router-link to="/dodge-game">Dodge game</router-link>
       </div>
     </div>
   </div>
