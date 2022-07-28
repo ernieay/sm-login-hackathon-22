@@ -11,6 +11,7 @@
         <router-link to="/ph-game">August (Buwan ng Wika)</router-link>
         <router-link to="/au-ipo">08 November (SiteMinder IPO)</router-link>
         <router-link to="/xmas">25 Dec (Christmas)</router-link>
+        <router-link to="/dodge-game">Dodge game</router-link>
       </div>
     </div>
   </div>

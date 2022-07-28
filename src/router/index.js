@@ -7,6 +7,7 @@ import PhGameView from '../views/PhGameView.vue'
 import XmasView from '../views/XmasView.vue'
 import LoggedInView from '../views/LoggedInView.vue'
 import SiteminderIPODoodleView from '../views/SiteminderIPODoodleView.vue'
+import DodgeGameView from '../views/DodgeGameView.vue'
 
 const routes = [
   {
@@ -48,6 +49,11 @@ const routes = [
     path: '/au-ipo',
     name: 'au ipo',
     component: SiteminderIPODoodleView
+  },
+  {
+    path: '/dodge-game',
+    name: 'dodge game',
+    component: DodgeGameView
   },
 ]
 
