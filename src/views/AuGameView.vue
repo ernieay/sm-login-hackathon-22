@@ -120,6 +120,7 @@ export default {
         var x, height, gap, minHeight, maxHeight, minGap, maxGap;
         for (let i = 0; i < myObstacles.length; i += 1) {
           if (myGamePiece.crashWith(myObstacles[i])) {
+            audio.pause();
             gameOverText.text = 'Laundry dropped :\'(';
             gameOverText.update();
             return;
